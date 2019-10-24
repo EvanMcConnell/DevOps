@@ -51,8 +51,6 @@ print("""...
 #Downloading file from url
 urllib.urlretrieve("http://devops.witdemo.net/image.jpg", "local.jpg")
 
-
-
 print("""...
 	/DONE
 /UPLOADING FILE TO BUCKET...""")
@@ -77,9 +75,12 @@ sudo service httpd start
 sudo su
 cd /var/www/html/
 echo '<html>' > index.html
-echo 'Private IP address: ' >> index.html
-echo '<br>Here is the image:<br> ' >> index.html
-echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html"""
+echo '<style type="text/css"> body{background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/05/Beautiful-cherry-blossom-wallpapers.jpg"); background-color: cyan;} p{color: white;} </style>' >> index.html
+echo '<body>' >> index.html
+echo '<p>Private IP address: </p>' >> index.html
+echo '<p>Here is the image:</p> ' >> index.html
+echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html
+echo '</body> >> index.html"""
 
 
 #print(user_data)
