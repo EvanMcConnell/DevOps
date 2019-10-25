@@ -69,24 +69,19 @@ print("""...
 
 
 #Assigning UserData code to be executed upon instance start
-#user_data=	"""#!/bin/bash
-#sudo yum update -y
-#sudo yum -y install httpd
-#systemctl enable httpd
-#sudo service httpd start
-#sudo su
-#cd /var/www/html/
-#echo '<html>' > index.html
-#echo '<style type="text/css"> body{background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/05/Beautiful-cherry-blossom-wallpapers.jpg"); background-color: cyan;} p{color: white;} </style>' >> index.html
-#echo '<body>' >> index.html
-#echo '<p>Public IP Address: </p>'
-#echo '<p>"""+public_ip_address+"""</p>' >> index.html
-#echo '<p>Private IP address: </p>' >> index.html
-#echo '<p>"""+private_ip_address+"""</p>' >> index.html
-#curl http://"""+public_ip_address+"""/latest/meta-data/local-ipv4 >> index.html
-#echo '<p>Here is the image:</p> ' >> index.html
-#echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html
-#echo '</body> >> index.html"""
+user_data=	"""#!/bin/bash
+sudo yum update -y
+sudo yum -y install httpd
+systemctl enable httpd
+sudo service httpd start
+sudo su
+cd /var/www/html/
+echo '<html>' > index.html
+echo '<style type="text/css"> body{background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/05/Beautiful-cherry-blossom-wallpapers.jpg"); background-color: cyan;} p{color: white;} </style>' >> index.html
+echo '<body>' >> index.html
+echo '<p>Here is the image:</p> ' >> index.html
+echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html
+echo '</body> >> index.html"""
 
 
 #print(user_data)
@@ -106,24 +101,7 @@ instance = ec2r.create_instances(
 	KeyName='key',
 	SecurityGroupIds=['sg-05b30b49b7d12d1eb'],
 	InstanceType='t2.micro',
-	UserData = """#!/bin/bash
-sudo yum update -y
-sudo yum -y install httpd
-systemctl enable httpd
-sudo service httpd start
-sudo su
-cd /var/www/html/
-echo '<html>' > index.html
-echo '<style type="text/css"> body{background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/05/Beautiful-cherry-blossom-wallpapers.jpg"); background-color: cyan;} p{color: white;} </style>' >> index.html
-echo '<body>' >> index.html
-echo '<p>Public IP Address: </p>'
-echo '<p>"""+instance[0].public_ip_address+"""</p>' >> index.html
-echo '<p>Private IP address: </p>' >> index.html
-echo '<p>"""+instance[0].private_ip_address+"""</p>' >> index.html
-curl http://"""+instance[0].public_ip_address+"""/latest/meta-data/local-ipv4 >> index.html
-echo '<p>Here is the image:</p> ' >> index.html
-echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html
-echo '</body> >> index.html""")
+	UserData = user_data)
 
 print("""...
 	/DONE
@@ -144,18 +122,12 @@ print(privip)
 os.system('ssh -i key.pem ec2.user@'+str(ip))
 os.system('sudo su')
 os.system('cd /var/www/html/')
-os.system("echo '<p>Private IP Address: </p>' >> index.html")
-os.system("echo "+str(privip)+" >> index.html")
-#os.system("echo '<html>' > index.html")
-#os.system("""echo '<style type="text/css"> body{background-image: url("https://www.pixelstalk.net/wp-content/uploads/2016/05/Beautiful-cherry-blossom-wallpapers.jpg"); background-color: cyan;} p{color: white;} </style>' >> index.html""")
-#os.system("echo '<body>' >> index.html")
-#os.system("echo '<p>Private IP address: </p>' >> index.html")
-#os.system("curl http://"+str(ip)+"/latest/meta-data/local-ipv4 >> index.html")
-#os.system("echo '<p>Availability Zone:: </p>' >> index.html")
-#os.system("curl http://"+str(ip)+"/latest/meta-data/placement/availability-zone")
-#os.system("echo '<p>Here is the image:</p> ' >> index.html")
-#os.system("""echo '<img src="https://s3-eu-west-1.amazonaws.com/""" + newBName + """/image.jpg">' >> index.html""")
-#os.system("echo '</body> >> index.html")
+os.system("echo '<p>Private IP Address: "+str(instance[0].private_ip_address)+"</p>' >> index.html")
+os.system("echo '<p>Public IP address: "+str(instance[0].public_ip_address)+"</p>' >> index.html")
+os.system("echo '<p>Image ID: "+str(instance[0].image_id)+"</p>' >> index.html")
+os.system("echo '<p>Launch Time: "+str(instance[0].launch_time)+"</p>' >> index.html")
+os.system("echo '<p>Kernal ID: "+str(instance[0].kernal_id)+"</p>' >> index.html")
+os.system("echo '</body> >> index.html")
 
 
 
